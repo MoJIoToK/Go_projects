@@ -24,6 +24,7 @@ curl --location --request GET '127.0.0.1:8080/status' \
 1. [Author repository](https://github.com/spatecon/echo-middleware-assessment.git)
 2. [YouTube channel of author](https://www.youtube.com/watch?v=Lsh3ylmXdJ8&t=2037s)
 3. [Repository of web framework](https://github.com/labstack/echo)
+4. [Standard Go Project Layout repository](https://github.com/golang-standards/project-layout?tab=readme-ov-file)
 
 # Echo middleware RU
 
