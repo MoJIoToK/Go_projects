@@ -4,12 +4,13 @@ A simple telegram bot for saving links received from the user and sending random
 
 This implementation is easily expandable, and if desired, you can work with other messengers.
 
-## assembly
+## Assembly
 
 ```
 go build
 .\article-advisor -tg-bot-token '<tg-bot-token>'
 ```
+`<tg-bot-token>` - Your tg-bot token
 
 ## References
 
