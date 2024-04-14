@@ -11,30 +11,33 @@ import (
 	"path/filepath"
 )
 
-// Storage is structure  Тип который реализует интерфейс. Хранит базовый путь, в какой папке хранится всё.
+// Storage is structure that stores the base path of the folder in which all pages is stored.
+// This structure implements interface.
 type Storage struct {
 	basePath string
 }
 
 const defaultPerm = 0774
 
+// New is constructor for Storage. Input data - basePath.
 func New(basePath string) Storage {
 	return Storage{basePath: basePath}
 }
 
+// Save is the method for save storage.Page in a folder at the created path.
 func (s Storage) Save(page *storage.Page) (err error) {
-	//Способ обработки ошибок
+	//Processing errors.
 	defer func() { err = er.WrapIfErr("can't save page", err) }()
 
-	//определение директории куда сохраняется файл
+	//Define path where the part of this path is username.
 	fPath := filepath.Join(s.basePath, page.UserName)
 
-	//Создаёт все директории в переданный путь
+	//Create directory with path.
 	if err := os.MkdirAll(fPath, defaultPerm); err != nil {
 		return err
 	}
 
-	//Создание папки и её имени
+	//Create filename in folder for define path.
 	fName, err := fileName(page)
 	if err != nil {
 		return err
@@ -42,16 +45,16 @@ func (s Storage) Save(page *storage.Page) (err error) {
 
 	fPath = filepath.Join(fPath, fName)
 
-	//Создание файла
+	//Create file with filename in fPath.
 	file, err := os.Create(fPath)
 	if err != nil {
 		return err
 	}
 
-	//Искусственно сделанная конструкция, для того чтобы показать, что мы сознательно игнорируем ошибку
+	//An artificially made structure to show that we are deliberately ignoring the error.
 	defer func() { _ = file.Close() }()
 
-	//Страница преобразовывается в формат gob и записывается в указанный файл
+	//The page is converted to gob format and written to the specified file
 	if err := gob.NewEncoder(file).Encode(page); err != nil {
 		return err
 	}
@@ -59,14 +62,15 @@ func (s Storage) Save(page *storage.Page) (err error) {
 	return nil
 }
 
+// PickRandom is the method that returns a random page from storage.
 func (s Storage) PickRandom(userName string) (page *storage.Page, err error) {
-	//Способ обработки ошибок
+	//Processing errors.
 	defer func() { err = er.WrapIfErr("can't pick random page", err) }()
 
-	//определение директории куда был сохранен файл
+	//Determining the directory where the file was saved
 	path := filepath.Join(s.basePath, userName)
 
-	//Получение списка файлов
+	//Getting a list of files.
 	files, err := os.ReadDir(path)
 	if err != nil {
 		return nil, err
@@ -83,6 +87,7 @@ func (s Storage) PickRandom(userName string) (page *storage.Page, err error) {
 	return s.decodePage(filepath.Join(path, file.Name()))
 }
 
+// Remove is the method that delete page in storage.
 func (s Storage) Remove(p *storage.Page) error {
 	fileName, err := fileName(p)
 	if err != nil {
@@ -100,6 +105,7 @@ func (s Storage) Remove(p *storage.Page) error {
 	return nil
 }
 
+// IsExists is the method that determines whether the given page exists or not.
 func (s Storage) IsExists(p *storage.Page) (bool, error) {
 	fileName, err := fileName(p)
 	if err != nil {
@@ -120,6 +126,7 @@ func (s Storage) IsExists(p *storage.Page) (bool, error) {
 	return true, nil
 }
 
+// decodePage is method that decode page.
 func (s Storage) decodePage(filePath string) (*storage.Page, error) {
 	f, err := os.Open(filePath)
 	if err != nil {
@@ -136,6 +143,8 @@ func (s Storage) decodePage(filePath string) (*storage.Page, error) {
 	return &p, nil
 }
 
+// fileName is method that create name of file in folder for define path using storage.Hash.
+// The hash is used to ensure that file names are not repeated
 func fileName(p *storage.Page) (string, error) {
 	return p.Hash()
 }

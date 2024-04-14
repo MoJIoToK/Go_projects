@@ -9,7 +9,8 @@ import (
 	"io"
 )
 
-// Storage is interface. Storage contains the methods for work with input data.
+// Storage is interface. Storage contains the methods for work with input data. This interface can work with files
+// and databases.
 type Storage interface {
 	Save(ctx context.Context, p *Page) error
 	PickRandom(ctx context.Context, userName string) (*Page, error)
@@ -21,7 +22,7 @@ var ErrNoSavedPages = errors.New("no saved page")
 
 // Page is main data type that Storage works with. The page to which the link that was sent to the bot leads.
 type Page struct {
-	//URL is main parameter this structure. URL is the link sent by the user.
+	//URL is main parameter of this structure. URL is the link sent by the user.
 	URL string
 	//UserName is nickname of user that send link.
 	UserName string

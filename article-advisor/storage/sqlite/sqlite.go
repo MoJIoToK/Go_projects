@@ -14,13 +14,14 @@ type Storage struct {
 
 // New creates new SQLite storage.
 func New(path string) (*Storage, error) {
-	//ОТкрытие бд
+
+	//Open db.
 	db, err := sql.Open("sqlite3", path)
 	if err != nil {
 		return nil, fmt.Errorf("can't open database: %w", err)
 	}
 
-	//Проверка связи с файлом с дб
+	//Checking connection with file with db.
 	if err := db.Ping(); err != nil {
 		return nil, fmt.Errorf("can't connect to database: %w", err)
 	}
@@ -28,6 +29,7 @@ func New(path string) (*Storage, error) {
 	return &Storage{db: db}, nil
 }
 
+// Save - save the page into db.
 func (s *Storage) Save(ctx context.Context, p *storage.Page) error {
 	//запрос на сохранение в БД
 	q := `INSERT INTO pages (url, user_name) VALUES (?, ?)`
@@ -40,6 +42,7 @@ func (s *Storage) Save(ctx context.Context, p *storage.Page) error {
 	return nil
 }
 
+// PickRandom - select random page from db.
 func (s *Storage) PickRandom(ctx context.Context, userName string) (*storage.Page, error) {
 	q := `SELECT url FROM pages WHERE user_name = ? ORDER BY RANDOM() LIMIT 1`
 
@@ -62,6 +65,7 @@ func (s *Storage) PickRandom(ctx context.Context, userName string) (*storage.Pag
 	}, nil
 }
 
+// Remove - delete page from db.
 func (s *Storage) Remove(ctx context.Context, page *storage.Page) error {
 	q := `DELETE FROM pages WHERE url = ? AND user_name = ?`
 

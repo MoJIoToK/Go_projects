@@ -10,17 +10,21 @@ import (
 	"strings"
 )
 
+// Main commands for bot.
 const (
 	RndCmd   = "/rnd"
 	HelpCmd  = "/help"
 	StartCmd = "/start"
 )
 
+// doCMD is method that calls processor methods depending on what came from the user.
 func (p *Processor) doCmd(text string, chatID int, username string) error {
+	//Delete space in text.
 	text = strings.TrimSpace(text)
 
 	log.Printf("got new command '%s' from '%s", text, username)
 
+	//command "Save". This command has no constants, it is just a link sent by the user.
 	if isAddCmd(text) {
 		return p.savePage(chatID, text, username)
 	}
@@ -37,32 +41,33 @@ func (p *Processor) doCmd(text string, chatID int, username string) error {
 	}
 }
 
+// savePage is method for save page.
 func (p *Processor) savePage(chatID int, pageURL string, username string) (err error) {
 	defer func() { err = er.WrapIfErr("can't do command: save page", err) }()
 
-	//sendMsg := NewMessageSender(chatID, p.tg)
-
-	//Подготовка страницы которую необходимо сохранить
+	//Preparing the page to be saved.
 	page := &storage.Page{
 		URL:      pageURL,
 		UserName: username,
 	}
 
+	//checking the availability of this page.
 	isExists, err := p.storage.IsExists(context.Background(), page)
 	if err != nil {
 		return err
 	}
 
-	//Ответ от бота
+	//Reply from a bot that this page is already exists.
 	if isExists {
 		return p.tg.SendMessage(chatID, msgAlreadyExists)
 	}
 
-	//Сохранение страницы
+	//Saving a page
 	if err := p.storage.Save(context.Background(), page); err != nil {
 		return err
 	}
 
+	//Reply from a bot that this page is save.
 	if err := p.tg.SendMessage(chatID, msgSaved); err != nil {
 		return err
 	}
@@ -70,6 +75,7 @@ func (p *Processor) savePage(chatID int, pageURL string, username string) (err e
 	return nil
 }
 
+// sendRandom is method for send random page.
 func (p *Processor) sendRandom(chatID int, username string) (err error) {
 	defer func() { err = er.WrapIfErr("can't do command: can't send random", err) }()
 
@@ -88,27 +94,25 @@ func (p *Processor) sendRandom(chatID int, username string) (err error) {
 	return p.storage.Remove(context.Background(), page)
 }
 
+// sendHelp is method for send help message.
 func (p *Processor) sendHelp(chatID int) error {
 	return p.tg.SendMessage(chatID, msgHelp)
 }
 
+// sendHello is method for send start message.
 func (p *Processor) sendHello(chatID int) error {
 	return p.tg.SendMessage(chatID, msgHello)
 }
 
-//// Функция замыкание для отправки сообщений
-//func NewMessageSender(chatId int, tg *telegram.Client) func(string) error {
-//	return func(msg string) error {
-//		return tg.SendMessage(chatId, msg)
-//	}
-//}
-
+// isAddCmd calls isURL. And returns bool data.
 func isAddCmd(text string) bool {
 	return isURL(text)
 }
 
+// isURL is function that determines text is a link.
 func isURL(text string) bool {
-	//Парсинг ссылки. При таком подходе у ссылки должен быть написан протокол
+
+	//Parsing link. Warning - the link must have a `http/https` written.
 	u, err := url.Parse(text)
 
 	return err == nil && u.Host != ""

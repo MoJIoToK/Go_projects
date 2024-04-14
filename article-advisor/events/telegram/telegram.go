@@ -15,11 +15,13 @@ type Processor struct {
 	storage storage.Storage
 }
 
+// Meta is structure for telegram bot, that stores the user number and his name
 type Meta struct {
 	ChatID   int
 	Username string
 }
 
+// Errors
 var (
 	ErrUnknownEventType = errors.New("unknown event type")
 	ErrUnknownMetaType  = errors.New("unknown meta type")
@@ -33,32 +35,34 @@ func New(client *telegram.Client, storage storage.Storage) *Processor {
 	}
 }
 
+// Fetch is method for collecting events from the tg client.
 func (p *Processor) Fetch(limit int) ([]events.Event, error) {
-	//Получение updates
+	//Receiving updates from client.
 	updates, err := p.tg.Updates(p.offset, limit)
 	if err != nil {
 		return nil, er.Wrap("can't get events", err)
 	}
 
-	//Возвращение нулей, если список updates пуст. Можно возвращать ошибку о том, что список updates пуст
+	//Return nil, if slice of updates empty. Maybe return error about the slice is empty.
 	if len(updates) == 0 {
 		return nil, nil
 	}
 
-	//Подготовка слайса под результат
+	//Slice for result.
 	res := make([]events.Event, 0, len(updates))
 
-	//Преобразуем всех updates в event
+	//iterating all the update and convert them into events.
 	for _, u := range updates {
 		res = append(res, event(u))
 	}
 
-	//Обновление offset для того, чтобы получить в следующий раз updates
+	//Update offset in order to get next time updates.
 	p.offset = updates[len(updates)-1].ID + 1
 
 	return res, nil
 }
 
+// Process is method that performs different actions depending on the event type.
 func (p *Processor) Process(event events.Event) error {
 	switch event.Type {
 	case events.Message:
@@ -68,6 +72,7 @@ func (p *Processor) Process(event events.Event) error {
 	}
 }
 
+// processMessage is method that process message in meta of event. This method calls Processor.doCMD method.
 func (p *Processor) processMessage(event events.Event) error {
 	meta, err := meta(event)
 	if err != nil {
@@ -81,6 +86,7 @@ func (p *Processor) processMessage(event events.Event) error {
 	return nil
 }
 
+// meta is function that returns Meta in event.
 func meta(event events.Event) (Meta, error) {
 	res, ok := event.Meta.(Meta)
 	if !ok {
@@ -90,6 +96,7 @@ func meta(event events.Event) (Meta, error) {
 	return res, nil
 }
 
+// event is function for transform update into event.
 func event(upd telegram.Update) events.Event {
 	updType := fetchType(upd)
 
@@ -108,6 +115,7 @@ func event(upd telegram.Update) events.Event {
 	return res
 }
 
+// fetchText is function that transform message text of update to text of event.
 func fetchText(upd telegram.Update) string {
 	if upd.Message == nil {
 		return ""
@@ -116,6 +124,7 @@ func fetchText(upd telegram.Update) string {
 	return upd.Message.Text
 }
 
+// fetchType is function that transform type of update to type of event.
 func fetchType(upd telegram.Update) events.Type {
 	if upd.Message == nil {
 		return events.Unknown

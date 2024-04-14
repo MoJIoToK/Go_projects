@@ -35,7 +35,7 @@ func main() {
 
 	log.Print("service started")
 
-	//Запуск Consumer
+	//Start Consumer
 	consumer := event_consumer.New(eventsProcessor, eventsProcessor, batchSize)
 	if err := consumer.Start(); err != nil {
 		log.Fatal("service is stopped", err)

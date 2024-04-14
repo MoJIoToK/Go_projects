@@ -26,7 +26,7 @@ type From struct {
 	Username string `json:"username"`
 }
 
-// Chatis chat ID.
+// Chat is chat ID.
 type Chat struct {
 	ID int `json:"id"`
 }
