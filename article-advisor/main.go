@@ -27,6 +27,7 @@ func main() {
 		log.Fatal("can't init storage: ", err)
 	}
 
+	//Create telegram.Processor
 	eventsProcessor := telegram.New(
 		tgClient.New(tgBotHost, mustToken()),
 		s,
@@ -41,19 +42,24 @@ func main() {
 	}
 }
 
-// Получение токена. Ошибки не возвращаются, вместо этого программа аварийно завершается(поэтому must).
+// mustToken allows you to get a token from a flag. Errors are not returned,
+// instead the program crashes (therefore a must).
 func mustToken() string {
 
+	//Defines a string flag with specified name. The return value is the address of a string
+	//variable that stores the value of the flag.
 	token := flag.String(
 		"tg-bot-token",
 		"",
-		"token for access to bot",
+		"token for access to telebot",
 	)
 
+	//Parses the command-line flags.
 	flag.Parse()
 
+	//Program crashes without token or if token = ""(empty string).
 	if *token == "" {
-		log.Fatal("Token is not specified")
+		log.Fatal("Token is not specified!")
 	}
 	return *token
 }

@@ -10,18 +10,24 @@ import (
 	"strconv"
 )
 
+// Client collects event for Fetcher using telegram bot API.
 type Client struct {
-	host     string
+	//host is a host telegram API.
+	host string
+	//prefix at the beginning of each request.
 	basePath string
-	client   http.Client
+	//client is a http.Client. Clients should be reused instead of created as needed.
+	client http.Client
 }
 
 const (
-	getUpdatesMethod  = "getUpdates"
+	// getUpdatesMethod is name of the method for generating the URL request for Update.
+	getUpdatesMethod = "getUpdates"
+	// sendMessageMethod is name of the method for generating the URL request for send message to user.
 	sendMessageMethod = "sendMessage"
 )
 
-// Constructor
+// Constructor telegram.client.
 func New(host string, token string) *Client {
 	return &Client{
 		host:     host,
@@ -30,22 +36,25 @@ func New(host string, token string) *Client {
 	}
 }
 
-// Генерация пути
+// newBasePath generates path.
 func newBasePath(token string) string {
 	return "bot" + token
 }
 
-//Методы для клиента. То чем он будет заниматься
+//Clients methods. methods that the client will execute when the application is running:
 
-// Получение новых сообщений. Возвращает структуру с данными.
+// Updates receives new messages. Returns the slice of structure Update from field UpdatesResponse.Result
+// structure UpdatesResponse and error.
 func (c *Client) Updates(offset int, limit int) (updates []Update, err error) {
 	defer func() { err = er.WrapIfErr("can't get updates", err) }()
 
+	//generation of request parameters.
 	q := url.Values{}
 	q.Add("offset", strconv.Itoa(offset))
+	//limit is a count of updates received per one request.
 	q.Add("limit", strconv.Itoa(limit))
 
-	//Получение данных из ответа
+	//Getting data from the response.
 	data, err := c.doRequest(getUpdatesMethod, q)
 	if err != nil {
 		return nil, err
@@ -53,7 +62,7 @@ func (c *Client) Updates(offset int, limit int) (updates []Update, err error) {
 
 	var res UpdatesResponse
 
-	//Парсинг ответа
+	//parsing the response from json.
 	if err := json.Unmarshal(data, &res); err != nil {
 		return nil, err
 	}
@@ -61,8 +70,10 @@ func (c *Client) Updates(offset int, limit int) (updates []Update, err error) {
 	return res.Result, nil
 }
 
-// Отправка сообщений
+// SendMessage sends messages to user.
 func (c *Client) SendMessage(chatID int, text string) error {
+
+	//generation of request parameters.
 	q := url.Values{}
 	q.Add("chat_id", strconv.Itoa(chatID))
 	q.Add("text", text)
@@ -75,32 +86,36 @@ func (c *Client) SendMessage(chatID int, text string) error {
 	return nil
 }
 
-// Отправка запроса
+// doRequest sends a formed request. Method returns the response data and error.
 func (c *Client) doRequest(method string, query url.Values) (data []byte, err error) {
 	defer func() { err = er.WrapIfErr("can't do request", err) }()
 
-	//URL на который отправляется запрос
+	//generating the URL to which the request is sent.
 	u := url.URL{
 		Scheme: "https",
 		Host:   c.host,
 		Path:   path.Join(c.basePath, method),
 	}
 
-	//Подготовка объекта запроса
+	//preparing the Request Object.
 	req, err := http.NewRequest(http.MethodGet, u.String(), nil)
 	if err != nil {
 		return nil, err
 	}
 
+	//passing request parameters(query) to request req.
 	req.URL.RawQuery = query.Encode()
 
+	//send request.
 	resp, err := c.client.Do(req)
 	if err != nil {
 		return nil, err
 	}
 
+	//close response body of request.
 	defer func() { _ = resp.Body.Close() }()
 
+	//getting body of response.
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err

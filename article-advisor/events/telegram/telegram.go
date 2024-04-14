@@ -8,6 +8,7 @@ import (
 	"errors"
 )
 
+// Processor processes events collected by the Fetcher using storage.Storage.
 type Processor struct {
 	tg      *telegram.Client
 	offset  int
@@ -24,6 +25,7 @@ var (
 	ErrUnknownMetaType  = errors.New("unknown meta type")
 )
 
+// New is a constructor Processor structure.
 func New(client *telegram.Client, storage storage.Storage) *Processor {
 	return &Processor{
 		tg:      client,
