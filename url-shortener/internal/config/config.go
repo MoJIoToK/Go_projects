@@ -7,12 +7,13 @@ import (
 	"time"
 )
 
-const CONFIG_PATH string = "/config/local.yaml"
+//const CONFIG_PATH string = "./config/local.yaml"
 
-// Структуры копирующие файл local.yaml
+// region Структуры копирующие настройки из файла local.yaml
+
 type Config struct {
 	Env         string `yaml:"env" env-default:"local"`
-	StoragePath string `yaml:"storage_path" env-default:"true"`
+	StoragePath string `yaml:"storage_path" env-required:"true"`
 	HTTPServer  `yaml:"http_server"`
 }
 
@@ -22,14 +23,23 @@ type HTTPServer struct {
 	IdleTimeOut time.Duration `yaml:"idle_timeout" env-default:"60s"`
 }
 
+//endregion
+
+// MustLoad - при ошибке должна выдавать панику.
 func MustLoad() *Config {
-	//Получение конфига из переменной окружения
-	configPath := os.Getenv(CONFIG_PATH)
+	//Искусственно введенная переменная окружения. Пока не разобрался как сделать по другому
+	err := os.Setenv("CONFIG_PATH", "./config/local.yaml")
+	if err != nil {
+		log.Fatal("Error setting CONFIG_PATH")
+	}
+
+	//Получение пути до файла с настройками из переменной окружения
+	configPath := os.Getenv("CONFIG_PATH")
 	if configPath == "" {
 		log.Fatal("CONFIG_PATH is not set")
 	}
 
-	//проверка существования такого файла
+	//Проверка существования файла с настройками
 	if _, err := os.Stat(configPath); os.IsNotExist(err) {
 		log.Fatalf("Config file does not exist: %s", configPath)
 	}
@@ -38,7 +48,6 @@ func MustLoad() *Config {
 
 	if err := cleanenv.ReadConfig(configPath, &cfg); err != nil {
 		log.Fatalf("Cannot read config: %s", err)
-
 	}
 
 	return &cfg
