@@ -1,0 +1,10 @@
+# Proxy
+news_service: "0.0.0.0:10501"
+comments_service: "0.0.0.0:10502"
+censor_service: "0.0.0.0:10503"
+# Server
+http_server:
+  address: "0.0.0.0:80"
+  read_timeout: 5s
+  write_timeout: 10s
+  idle_timeout: 60s
