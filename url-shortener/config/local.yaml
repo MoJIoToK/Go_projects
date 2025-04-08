@@ -1,0 +1,8 @@
+env: "local" # local, development, production - окружение
+storage_path: "./database/storageUS.db" # - путь где будет храниться БД
+http_server:
+  address: "localhost:8082"
+  timeout: 4s # - время на чтение запроса и такое же на отправку ответа
+  idle_timeout: 60s # - время жизни соединения с клиентом
+  user: "user"
+  password: "user"
