@@ -26,7 +26,7 @@
 - Пакеты `webapp` в `cmd` и `web` в корне скопированы
   из [репозитория](https://github.com/SkillfactoryCoding/GO-Advanced-GoNews/tree/master)
 
-[Решение находится здесь](https://github.com/MoJIoToK/learning_go/tree/master/GoNews)
+[Решение находится здесь](https://github.com/MoJIoToK/Go_projects/tree/main/GoNews)
 
 ## Запуск приложения
 
@@ -48,6 +48,6 @@
 
 ## References
 
-- [Сервис шлюз](https://github.com/MoJIoToK/learning_go/tree/master/APIGateWay)
-- [Сервис комментариев](https://github.com/MoJIoToK/learning_go/tree/master/Comments)
-- [Сервис цензурирования комментариев](https://github.com/MoJIoToK/learning_go/tree/master/Cenzor)
+- [Сервис шлюз](https://github.com/MoJIoToK/Go_projects/tree/main/APIGateWay)
+- [Сервис комментариев](https://github.com/MoJIoToK/Go_projects/tree/main/Comments)
+- [Сервис цензурирования комментариев](https://github.com/MoJIoToK/Go_projects/tree/main/Cenzor)

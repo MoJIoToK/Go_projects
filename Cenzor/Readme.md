@@ -13,6 +13,6 @@
 
 ## References
 
-- [Сервис шлюз](https://github.com/MoJIoToK/learning_go/tree/master/APIGateWay)
-- [Сервис новостного агрегатора](https://github.com/MoJIoToK/learning_go/tree/master/GoNews)
-- [Сервис комментариев](https://github.com/MoJIoToK/learning_go/tree/master/Comments)
+- [Сервис шлюз](https://github.com/MoJIoToK/Go_projects/tree/main/APIGateWay)
+- [Сервис новостного агрегатора](https://github.com/MoJIoToK/Go_projects/tree/main/GoNews)
+- [Сервис комментариев](https://github.com/MoJIoToK/Go_projects/tree/main/Comments)

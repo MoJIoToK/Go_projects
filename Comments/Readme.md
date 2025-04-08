@@ -8,7 +8,7 @@
 
 Для запуска приложения необходимо развернуть сервер с БД mongoDB и подключиться к серверу.
 
-БД для сервиса использовалась из сервиса GoNews. См [запуск БД](https://github.com/MoJIoToK/learning_go/tree/master/GoNews)
+БД для сервиса использовалась из сервиса GoNews. См [запуск БД](https://github.com/MoJIoToK/Go_projects/tree/main/GoNews)
 
 ## Методы проверки
 
@@ -33,6 +33,6 @@ NewsID - ID новости в формате ObjectID из MongoDB. Content - с
 
 ## References
 
-- [Сервис шлюз](https://github.com/MoJIoToK/learning_go/tree/master/APIGateWay)
-- [Сервис новостного агрегатора](https://github.com/MoJIoToK/learning_go/tree/master/GoNews)
-- [Сервис цензурирования комментариев](https://github.com/MoJIoToK/learning_go/tree/master/Cenzor)
+- [Сервис шлюз](https://github.com/MoJIoToK/Go_projects/tree/main/APIGateWay)
+- [Сервис новостного агрегатора](https://github.com/MoJIoToK/Go_projects/tree/main/GoNews)
+- [Сервис цензурирования комментариев](https://github.com/MoJIoToK/Go_projects/tree/main/Cenzor)

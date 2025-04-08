@@ -26,6 +26,6 @@ NewsID - ID новости в формате ObjectID из MongoDB. Content - с
 
 ## References
 
-- [Сервис новостного агрегатора](https://github.com/MoJIoToK/learning_go/tree/master/GoNews)
-- [Сервис комментариев](https://github.com/MoJIoToK/learning_go/tree/master/Comments)
-- [Сервис цензурирования комментариев](https://github.com/MoJIoToK/learning_go/tree/master/Cenzor)
+- [Сервис новостного агрегатора](https://github.com/MoJIoToK/Go_projects/tree/main/GoNews)
+- [Сервис комментариев](https://github.com/MoJIoToK/Go_projects/tree/main/Comments)
+- [Сервис цензурирования комментариев](https://github.com/MoJIoToK/Go_projects/tree/main/Cenzor)

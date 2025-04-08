@@ -4,3 +4,14 @@
 {"time":"2025-04-01T23:01:53.0411529+03:00","level":"DEBUG","msg":"Logger setup load successful"}
 {"time":"2025-04-01T23:01:53.0648761+03:00","level":"INFO","msg":"StartMenu"}
 {"time":"2025-04-01T23:01:53.0648761+03:00","level":"INFO","msg":"Main menu"}
+{"time":"2025-04-08T22:54:17.0045113+03:00","level":"DEBUG","msg":"Logger setup load successful"}
+{"time":"2025-04-08T22:54:17.0326591+03:00","level":"INFO","msg":"StartMenu"}
+{"time":"2025-04-08T22:54:17.0326591+03:00","level":"INFO","msg":"Main menu"}
+{"time":"2025-04-08T22:54:23.0682242+03:00","level":"INFO","msg":"User choices 1"}
+{"time":"2025-04-08T22:54:26.0939063+03:00","level":"INFO","msg":"GetMarketData"}
+{"time":"2025-04-08T22:54:26.0948625+03:00","level":"INFO","msg":"Request URL: https://iss.moex.com/iss/engines/stock/markets/shares/boards/TQBR/securities.json?securities=mtss"}
+{"time":"2025-04-08T22:54:26.1772934+03:00","level":"INFO","msg":"ExtractData"}
+{"time":"2025-04-08T22:54:26.1772934+03:00","level":"INFO","msg":"Print to console"}
+{"time":"2025-04-08T22:54:26.1772934+03:00","level":"INFO","msg":"Main menu"}
+{"time":"2025-04-08T22:54:35.2654019+03:00","level":"INFO","msg":"User choices 2"}
+{"time":"2025-04-08T22:54:35.2661666+03:00","level":"INFO","msg":"Main menu"}
