@@ -118,3 +118,4 @@ fabric.properties
 
 # DB
 *data/
+*.db
